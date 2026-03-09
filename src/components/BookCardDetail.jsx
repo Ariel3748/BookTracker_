@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { NavLink, useParams } from "react-router"
+import { Navigate, NavLink, useNavigate, useParams } from "react-router"
 
 function BookCardDetail(){
 
     const [load,setLoad] = useState(true)
     const[book,setBook] = useState('')
+    const navigate = useNavigate()
 
     const {id} = useParams()
 
@@ -25,6 +26,26 @@ function BookCardDetail(){
         }
         fetchBook()
       },[])
+
+
+      const handleDelete = ()=>{
+        const fetchDeleteBook = async ()=>{//Se puede exportar en un get
+          try{
+              const resp = await fetch('http://localhost:3000/books/' + id,{
+                    method: 'DELETE',
+                })
+              console.log("fetch a ",'http://localhost:3000/books/' + id,"delete" )
+              const data = await resp.json()
+              console.log(data)
+          }
+          catch(err){
+            console.log("Fallo el borrado")
+          }
+        }
+        
+        fetchDeleteBook()
+        navigate('/')
+      }
 
       if(load){
         return(
@@ -91,7 +112,7 @@ function BookCardDetail(){
                     Editar Ficha
                 </button>
                 </NavLink>
-                <button className="flex-1 bg-transparent text-[#8b0000] py-2 font-sans text-xs uppercase tracking-widest font-bold border border-[#8b0000]/30 hover:bg-[#8b0000] hover:text-white transition-all">
+                <button onClick={handleDelete} className="flex-1 bg-transparent text-[#8b0000] py-2 font-sans text-xs uppercase tracking-widest font-bold border border-[#8b0000]/30 hover:bg-[#8b0000] hover:text-white transition-all">
                     Eliminar
                 </button>
             </div>
