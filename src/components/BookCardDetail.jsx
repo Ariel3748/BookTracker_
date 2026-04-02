@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react"
 import { NavLink, useParams } from "react-router"
 import fetchHandler from "../../utils/fetch"
 import LibrosContext from "../context/librosContext"
+import Swal from "sweetalert2"
+import sweetAlertDelte from "../../utils/sweetAlertDelete"
 
 function BookCardDetail(){
 
@@ -19,7 +21,7 @@ function BookCardDetail(){
                 }
 
             } catch (error) {
-               return(<p>Error: {error}</p>)
+                console.log(error)
             }
             finally{
                 setLoad(false)
@@ -35,7 +37,6 @@ function BookCardDetail(){
         <div className="text-center py-20 font-serif text-[#8b5a2b]">Cargando...</div>
         )
       }
-
     return(
         <>
 <div className="max-w-4xl mx-auto my-10 p-4 sm:p-8 bg-[#fdfaf6] border-2 border-[#d7ccc8] shadow-2xl relative rounded-sm">

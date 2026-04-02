@@ -5,6 +5,7 @@ import NavBar from "./components/NavBar"
 import BookCardDetail from "./components/BookCardDetail"
 import Rutas from "./rutas/Rutas"
 import { LibrosProvider } from "./context/librosContext"
+import Swal from 'sweetalert2'
 
 function App() {
 
