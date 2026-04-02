@@ -1,51 +1,34 @@
-import { useEffect, useState } from "react"
-import { Navigate, NavLink, useNavigate, useParams } from "react-router"
+import { useContext, useEffect, useState } from "react"
+import { NavLink, useParams } from "react-router"
+import fetchHandler from "../../utils/fetch"
+import LibrosContext from "../context/librosContext"
 
 function BookCardDetail(){
 
     const [load,setLoad] = useState(true)
     const[book,setBook] = useState('')
-    const navigate = useNavigate()
-
     const {id} = useParams()
+    const { handleDelete } = useContext(LibrosContext);
 
     useEffect(()=>{
-        const fetchBook = async ()=>{//Se puede exportar en un get
-          try{
-              const resp = await fetch('http://localhost:3000/books/' + id)
-              console.log("fetch a ",'http://localhost:3000/books/' + id )
-              const data = await resp.json()
-    
-              setBook(data)
-              setLoad(false)
-    
-          }
-          catch(err){
-            console.log("Fallo la carga")
-          }
+        const getBook = async () =>{
+            try {
+                const data = await fetchHandler('http://localhost:3000/books/' + id)
+                if(data){
+                    setBook(data)
+                }
+
+            } catch (error) {
+               return(<p>Error: {error}</p>)
+            }
+            finally{
+                setLoad(false)
+            }
+
         }
-        fetchBook()
+        getBook()
       },[])
 
-
-      const handleDelete = ()=>{
-        const fetchDeleteBook = async ()=>{//Se puede exportar en un get
-          try{
-              const resp = await fetch('http://localhost:3000/books/' + id,{
-                    method: 'DELETE',
-                })
-              console.log("fetch a ",'http://localhost:3000/books/' + id,"delete" )
-              const data = await resp.json()
-              console.log(data)
-          }
-          catch(err){
-            console.log("Fallo el borrado")
-          }
-        }
-        
-        fetchDeleteBook()
-        navigate('/')
-      }
 
       if(load){
         return(
@@ -96,11 +79,11 @@ function BookCardDetail(){
             </div> */}
 
             {/* Observaciones: Estilo cuadro de texto antiguo */}
-            <div className="flex-grow mb-8">
+            <div className="grow mb-8">
                 <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#a1887f] font-bold block mb-2">
                     Observaciones:
                 </span>
-                <div className="bg-[#faf7f2] border border-[#d7ccc8] p-4 text-[#4a3728] font-serif italic leading-relaxed min-h-[120px] rounded-sm">
+                <div className="bg-[#faf7f2] border border-[#d7ccc8] p-4 text-[#4a3728] font-serif italic leading-relaxed min-h-30 rounded-sm">
                     {book.comments || "No hay observaciones registradas para este volumen."}
                 </div>
             </div>
@@ -112,7 +95,7 @@ function BookCardDetail(){
                     Editar Ficha
                 </button>
                 </NavLink>
-                <button onClick={handleDelete} className="flex-1 bg-transparent text-[#8b0000] py-2 font-sans text-xs uppercase tracking-widest font-bold border border-[#8b0000]/30 hover:bg-[#8b0000] hover:text-white transition-all">
+                <button onClick={()=>{handleDelete(id)}} className="flex-1 bg-transparent text-[#8b0000] py-2 font-sans text-xs uppercase tracking-widest font-bold border border-[#8b0000]/30 hover:bg-[#8b0000] hover:text-white transition-all">
                     Eliminar
                 </button>
             </div>

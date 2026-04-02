@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import BookCard from "./BookCard"
+import fetchHandler from "../../utils/fetch"
 
 
 function BookContainer(){
@@ -9,31 +10,23 @@ function BookContainer(){
   const [load, setLoad] = useState(true)
 
   useEffect(()=>{
-    const fetchBooks = async ()=>{//Se puede exportar en un get
-      try{
-          const resp = await fetch('http://localhost:3000/books')
-          const data = await resp.json()
-
-          setBooks(data)
-          setLoad(false)
-
-      }
-      catch(err){
-        console.log("Fallo la carga")
-      }
+    const getBooks = async () => {
+        try {
+            const data = await fetchHandler('http://localhost:3000/books/')
+            if(data){
+                setBooks(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        finally{
+            setLoad(false)
+        }
     }
-    fetchBooks()
+    getBooks()
   },[])
 
   if(load){return <div className="text-center py-20 font-serif text-[#8b5a2b]">Abriendo los archivos...</div>;}
-
-
-
-
-
-
-
-
 
     return(
 

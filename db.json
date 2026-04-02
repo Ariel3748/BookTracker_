@@ -15,10 +15,7 @@
       "title": "1984",
       "author": "George Orwell",
       "image": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1532714506i/40961427.jpg",
-      "comments": [
-        "Aterradoramente relevante.",
-        "El concepto del Gran Hermano es brillante."
-      ]
+      "comments": "Aterradoramente relevante.,El concepto del Gran Hermano es brillante. Esto se edito desde contexto"
     },
     {
       "id": "3",
@@ -31,5 +28,5 @@
       ]
     }
   ],
-  "$schema": "./node_modules/json-server/schema.json"
+  "$schema": ["./node_modules/json-server/schema.json"]
 }

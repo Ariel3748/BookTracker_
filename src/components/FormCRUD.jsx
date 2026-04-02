@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router"
+import fetchHandler from "../../utils/fetch"
+import LibrosContext from "../context/librosContext"
 
 function FromCRUD({flag=0}){
-
-  if(flag==1){
-  console.log("Hay que editar")
-  }
 
   const formInicial = {
   title: '',
@@ -17,28 +15,30 @@ function FromCRUD({flag=0}){
   const [load,setLoad] = useState(false)
   const[book,setBook] = useState('0')
   const [form, setForm] = useState(formInicial)
-
   const {id} = useParams()
+  const{handleAgregarLibro, handleEditLibro} = useContext(LibrosContext)
+
+
+
 
   const titulo = flag ? "Formulario de Edicion" : "Registro de Nuevo Volumen"
 
     
       useEffect(()=>{
-        const fetchBook = async ()=>{//Se puede exportar en un get
-          try{
-              const resp = await fetch('http://localhost:3000/books/' + id)
-              console.log("fetch a ",'http://localhost:3000/books/' + id )
-              const data = await resp.json()
-              console.log(data)
-              setLoad(false)
+        const fetchBook2 = async ()=>{
+          try {
+            const data = await fetchHandler('http://localhost:3000/books/' + id)
+            if(data){
               setForm(data)
-    
+            }
+          } catch (error) {
+            console.error(error)
           }
-          catch(err){
-            console.log("Fallo la carga")
+          finally{
+            setLoad(false)
           }
         }
-        if(flag){fetchBook()}
+        if(flag){fetchBook2()}
       },[])
     
     
@@ -49,58 +49,15 @@ function FromCRUD({flag=0}){
         )}
 
 
-
-
-
-
-
-
-  const handleEditLibro = async (libroEditado) => {
-    try {
-        const fetchCarga = await fetch('http://localhost:3000/books/' + id,{
-          method:'PUT',
-          headers:{
-            'Content-Type': 'application/json'
-          },
-        body: JSON.stringify(libroEditado)
-      }) 
-      console.log("Salio bien el put")
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-
-  const handleAgregarLibro = async (nuevoLibro) => {
-    try {
-        const fetchCarga = await fetch('http://localhost:3000/books',{
-          method:'POST',
-          headers:{
-            'Content-Type': 'application/json'
-          },
-        body: JSON.stringify(nuevoLibro)
-      }) 
-      console.log("Salio bien el post")
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const handleControlFormulario = (e)=>{
-
-    console.log(e.target.name)
-    console.log(e.target.value)
-
     const formularioModificado = {...form, [e.target.name]: e.target.value}
-    console.log(formularioModificado)
     setForm(formularioModificado)
     
   }
 
   const handleSubmitForm = (e) =>{
     e.preventDefault()
-    console.log("funciona el preventDefault")
-    !flag ? handleAgregarLibro(form) : handleEditLibro(form)
+    !flag ? handleAgregarLibro(form) : handleEditLibro(form, id)
   }
 
 
