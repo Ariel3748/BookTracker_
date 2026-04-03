@@ -50,29 +50,52 @@ const LibrosProvider = ({children})=>{
 
       const handleAgregarLibro = async (nuevoLibro) => {
         try {
-            await fetchHandler('http://localhost:3000/books',{
+            const resp = await fetchHandler('http://localhost:3000/books',{
                 method:'POST',
                 headers:{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(nuevoLibro)
             })
+            if(resp){
+                await Swal.fire({
+                        title:'¡Agregado!',
+                        text:'El libro ha sido agregado correctamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Okey',
+                        
+                    });
+                navigate('/')
+            }
         } catch (error) {
             console.log(error)
         }
+
     }
 
 
     const handleEditLibro = async (libroEditado, id) => {
         try {
-            await fetchHandler('http://localhost:3000/books/' + id,{
+            const resp = await fetchHandler('http://localhost:3000/books/' + id,{
                 method:'PUT',
                 headers:{
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(libroEditado)
             })
-        //SweetAlert
+        if(resp){
+            console.log(resp)
+            await Swal.fire({
+                        title:'¡Editado!',
+                        text:'El libro ha sido editado correctamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Okey',
+                        
+                    });
+            navigate('/')
+        }
         } catch (error) {
             console.log(error)
         }

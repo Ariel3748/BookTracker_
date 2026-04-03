@@ -5,7 +5,7 @@ const fetchHandler = async (url, options) => {
       throw new Error(`Error: ${resp.status} ${resp.statusText}`);
     }
     const data = await resp.json();
-    return data;
+    return (data);
   } catch (error) {
     console.error(error);
     throw error;
