@@ -1,8 +1,7 @@
 import { NavLink } from "react-router";
 
 function BookCard({ book }) {
-  const imageExample =
-    "https://i.pinimg.com/736x/7e/f3/ac/7ef3ac91e5eb54449d1224874405f887.jpg";
+
 
   return (
     <div
@@ -11,7 +10,7 @@ function BookCard({ book }) {
     >
       {/* Portada: Ajustada para que sea responsive */}
       <img
-        src={book.image || imageExample}
+        src={book.image}
         alt={"portada " + book.title}
         className="w-full h-48 object-cover mb-4 rounded-sm shadow-sm border border-[#ede0d4]"
       />

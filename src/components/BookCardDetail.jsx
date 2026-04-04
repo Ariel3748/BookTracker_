@@ -1,112 +1,120 @@
-import { useContext, useEffect, useState } from "react"
-import { NavLink, useParams } from "react-router"
-import fetchHandler from "../../utils/fetch"
-import LibrosContext from "../context/librosContext"
-import Swal from "sweetalert2"
-import sweetAlertDelte from "../../utils/sweetAlertDelete"
+import { useContext, useEffect, useState } from "react";
+import { NavLink, useParams } from "react-router";
+import fetchHandler from "../../utils/fetch";
+import LibrosContext from "../context/librosContext";
+import Swal from "sweetalert2";
+import sweetAlertDelte from "../../utils/sweetAlertDelete";
+import { StarRating } from "react-flexible-star-rating";
 
-function BookCardDetail(){
+function BookCardDetail() {
+  const [load, setLoad] = useState(true);
+  const [book, setBook] = useState("");
+  const { id } = useParams();
+  const { handleDelete } = useContext(LibrosContext);
 
-    const [load,setLoad] = useState(true)
-    const[book,setBook] = useState('')
-    const {id} = useParams()
-    const { handleDelete } = useContext(LibrosContext);
-
-    useEffect(()=>{
-        const getBook = async () =>{
-            try {
-                const data = await fetchHandler('http://localhost:3000/books/' + id)
-                if(data){
-                    setBook(data)
-                }
-
-            } catch (error) {
-                console.log(error)
-            }
-            finally{
-                setLoad(false)
-            }
-
+  useEffect(() => {
+    const getBook = async () => {
+      try {
+        const data = await fetchHandler("http://localhost:3000/books/" + id);
+        if (data) {
+          setBook(data);
         }
-        getBook()
-      },[])
-
-
-      if(load){
-        return(
-        <div className="text-center py-20 font-serif text-[#8b5a2b]">Cargando...</div>
-        )
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoad(false);
       }
-    return(
-        <>
-<div className="max-w-4xl mx-auto my-10 p-4 sm:p-8 bg-[#fdfaf6] border-2 border-[#d7ccc8] shadow-2xl relative rounded-sm">
-    {/* Decoración de borde superior tipo carpeta */}
-    <div className="absolute top-0 left-0 w-full h-1.5 bg-[#4a3728]"></div>
+    };
+    getBook();
+  }, []);
 
-    <div className="flex flex-col md:flex-row gap-8">
-        
-        {/* Lado Izquierdo: Portada */}
-        <div className="w-full md:w-1/3 shrink-0">
+  if (load) {
+    return (
+      <div className="text-center py-20 font-serif text-[#8b5a2b]">
+        Cargando...
+      </div>
+    );
+  }
+  return (
+    <>
+      <div className="max-w-4xl mx-auto my-10 p-4 sm:p-8 bg-[#fdfaf6] border-2 border-[#d7ccc8] shadow-2xl relative rounded-sm">
+        {/* Decoración de borde superior tipo carpeta */}
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-[#4a3728]"></div>
+
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Lado Izquierdo: Portada */}
+          <div className="w-full md:w-1/3 shrink-0">
             <div className="border-4 border-[#ede0d4] shadow-lg rounded-sm overflow-hidden">
-                <img 
-                    src={book.image} 
-                    alt={book.title} 
-                    className="w-full h-auto object-cover"
-                />
+              <img
+                src={book.image}
+                alt={book.title}
+                className="w-full h-auto object-cover"
+              />
             </div>
-        </div>
+          </div>
 
-        {/* Lado Derecho: Información */}
-        <div className="w-full md:w-2/3 flex flex-col">
-            
+          {/* Lado Derecho: Información */}
+          <div className="w-full md:w-2/3 flex flex-col">
             {/* Título y Autor */}
             <div className="border-b border-[#e5d3b3] pb-4 mb-6">
-                <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#2c241e] mb-2 leading-tight">
-                    {book.title}
-                </h1>
-                <p className="font-serif italic text-xl text-[#8b5a2b]">
-                    por {book.author}
-                </p>
+              <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#2c241e] mb-2 leading-tight">
+                {book.title}
+              </h1>
+              <p className="font-serif italic text-xl text-[#8b5a2b]">
+                por {book.author}
+              </p>
             </div>
 
-            {/* Calificación / Metadatos 
+            <h3 className="mt-2 font-serif italic text-sm text-[#a1887f] flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#8b5a2b]"></span>
+              {book.status === "por-leer" && "Pendiente de lectura"}
+              {book.status === "en-lectura" && "Actualmente leyendo..."}
+              {book.status === "finalizado" && "Lectura completada"}
+            </h3>
+
             <div className="mb-6">
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#a1887f] font-bold">
-                    Calificación:
-                </span>
-                <p className="text-lg text-[#4a3728] font-serif">
-                    {book.rating || "Sin calificar"} / 5
-                </p>
-            </div> */}
+              <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#a1887f] font-bold">
+                Calificación:
+              </span>
+              <StarRating
+                dimension={15}
+                initialRating={book.rating}
+                isReadOnly={true}
+              ></StarRating>
+            </div>
 
             {/* Observaciones: Estilo cuadro de texto antiguo */}
             <div className="grow mb-8">
-                <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#a1887f] font-bold block mb-2">
-                    Observaciones:
-                </span>
-                <div className="bg-[#faf7f2] border border-[#d7ccc8] p-4 text-[#4a3728] font-serif italic leading-relaxed min-h-30 rounded-sm">
-                    {book.comments || "No hay observaciones registradas para este volumen."}
-                </div>
+              <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#a1887f] font-bold block mb-2">
+                Observaciones:
+              </span>
+              <div className="bg-[#faf7f2] border border-[#d7ccc8] p-4 text-[#4a3728] font-serif italic leading-relaxed min-h-30 rounded-sm">
+                {book.comments ||
+                  "No hay observaciones registradas para este volumen."}
+              </div>
             </div>
 
             {/* Botones de Acción */}
             <div className="flex gap-4 mt-auto">
-                <NavLink to={'/edit/'+book.id}>
+              <NavLink to={"/edit/" + book.id}>
                 <button className="flex-1 bg-[#4a3728] text-[#fdfaf6] py-2 font-sans text-xs uppercase tracking-widest font-bold hover:bg-[#2c241e] transition-colors border border-[#4a3728]">
-                    Editar Ficha
+                  Editar Ficha
                 </button>
-                </NavLink>
-                <button onClick={()=>{handleDelete(id)}} className="flex-1 bg-transparent text-[#8b0000] py-2 font-sans text-xs uppercase tracking-widest font-bold border border-[#8b0000]/30 hover:bg-[#8b0000] hover:text-white transition-all">
-                    Eliminar
-                </button>
+              </NavLink>
+              <button
+                onClick={() => {
+                  handleDelete(id);
+                }}
+                className="flex-1 bg-transparent text-[#8b0000] py-2 font-sans text-xs uppercase tracking-widest font-bold border border-[#8b0000]/30 hover:bg-[#8b0000] hover:text-white transition-all"
+              >
+                Eliminar
+              </button>
             </div>
-
+          </div>
         </div>
-    </div>
-</div>
-        </>
-    )
-
+      </div>
+    </>
+  );
 }
 
-export default BookCardDetail
+export default BookCardDetail;
