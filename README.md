@@ -28,7 +28,7 @@ Para ejecutar este proyecto localmente:
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone [https://github.com/tu-usuario/booktracker-v2.git](https://github.com/tu-usuario/booktracker-v2.git)
+    git clone [https://github.com/tu-usuario/booktracker-v2.git](https://github.com/Ariel3748/BookTracker_)
     cd booktracker-v2
     ```
 
