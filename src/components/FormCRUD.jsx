@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import fetchHandler from "../../utils/fetch";
 import LibrosContext from "../context/librosContext";
 import { StarRating } from "react-flexible-star-rating";
+import Swal from "sweetalert2";
 
 function FromCRUD({ flag = 0 }) {
   const formInicial = {
@@ -53,6 +54,15 @@ function FromCRUD({ flag = 0 }) {
     );
   }
 
+    const validarForm = ()=>{
+    if(!form.title){
+      return ("El titulo es necesario")
+    }
+    if(!form.author){
+      return("El autor es necesario")
+    }
+  }
+
   const handleControlFormulario = (e) => {
     const formularioModificado = {
       ...form,
@@ -64,7 +74,13 @@ function FromCRUD({ flag = 0 }) {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    !flag ? handleAgregarLibro(form) : handleEditLibro(form, id);
+    const err = validarForm()
+    if(err){
+      Swal.fire(err)
+    }
+    else{
+      !flag ? handleAgregarLibro(form) : handleEditLibro(form, id);
+    }
     console.log(form);
   };
 
@@ -73,6 +89,8 @@ function FromCRUD({ flag = 0 }) {
     const formularioModificado = { ...form, rating: newRating };
     setForm(formularioModificado);
   };
+
+
 
   return (
     <>
