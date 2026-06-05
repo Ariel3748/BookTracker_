@@ -2,8 +2,13 @@ import { Route, Routes } from "react-router"
 import BookCardDetail from "../components/BookCardDetail"
 import BookContainer from "../components/BookContainer"
 import FromCRUD from "../components/FormCRUD"
+import Login from "../components/Login"
+import Register from "../components/Register"
 
 const Rutas = () => {
+
+
+
 
 return(
     <>
@@ -12,6 +17,8 @@ return(
                 <Route path="/formCrud" element={<FromCRUD/>}/>
                 <Route path="/book/:id" element={<BookCardDetail/>}/>
                 <Route path='/edit/:id' element={<FromCRUD flag={1}/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
                     
         </Routes>
     

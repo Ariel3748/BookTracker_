@@ -15,7 +15,7 @@ function BookCardDetail() {
   useEffect(() => {
     const getBook = async () => {
       try {
-        const data = await fetchHandler("http://localhost:3000/books/" + id);
+        const data = await fetchHandler("http://localhost:3000/libros/" + id);
         if (data) {
           setBook(data);
         }

@@ -12,7 +12,7 @@ function BookContainer(){
   useEffect(()=>{
     const getBooks = async () => {
         try {
-            const data = await fetchHandler('http://localhost:3000/books/')
+            const data = await fetchHandler('http://localhost:3000/libros/')
             if(data){
                 setBooks(data)
             }
