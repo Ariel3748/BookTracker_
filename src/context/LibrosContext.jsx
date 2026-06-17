@@ -25,8 +25,10 @@ const LibrosProvider = ({children})=>{
             if (result.isConfirmed) {
                 try {
                     const resp = await fetchHandler('http://localhost:3000/books/' + id, {
-                        method: 'DELETE',
-                    });
+                        method: "DELETE",
+                        credentials: "include",
+                        headers: { "Content-Type": "application/json" },
+                });
                     if (resp) {
                     await Swal.fire({
                         title:'¡Borrado!',
@@ -51,12 +53,11 @@ const LibrosProvider = ({children})=>{
       const handleAgregarLibro = async (nuevoLibro) => {
         try {
             const resp = await fetchHandler('http://localhost:3000/books',{
-                method:'POST',
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(nuevoLibro)
-            })
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(nuevoLibro),
+        })
             if(resp){
                 await Swal.fire({
                         title:'¡Agregado!',

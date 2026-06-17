@@ -12,6 +12,10 @@ function BookCardDetail() {
   const { id } = useParams();
   const { handleDelete } = useContext(LibrosContext);
 
+  const redondearAMediaEstrella = (valor) => {
+    return Math.round(valor * 2) / 2
+}
+
   useEffect(() => {
     const getBook = async () => {
       try {
@@ -78,7 +82,7 @@ function BookCardDetail() {
               </span>
               <StarRating
                 dimension={15}
-                initialRating={book.rating}
+                initialRating={redondearAMediaEstrella(book.rating)}
                 isReadOnly={true}
               ></StarRating>
             </div>
